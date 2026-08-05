@@ -231,7 +231,45 @@ const clearAllData = async () => {
     }
 };
 
+
+const formatSheets = async () => {
+    try {
+        if (!process.env.SPREADSHEET_ID) return;
+        const auth = getAuthToken();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const response = await sheets.spreadsheets.get({ spreadsheetId: process.env.SPREADSHEET_ID });
+        const requests = [];
+        response.data.sheets.forEach(sheet => {
+            requests.push({
+                repeatCell: {
+                    range: { sheetId: sheet.properties.sheetId },
+                    cell: {
+                        userEnteredFormat: {
+                            horizontalAlignment: 'LEFT',
+                            verticalAlignment: 'MIDDLE',
+                            textDirection: 'LEFT_TO_RIGHT',
+                            wrapStrategy: 'WRAP'
+                        }
+                    },
+                    fields: 'userEnteredFormat(horizontalAlignment,verticalAlignment,textDirection,wrapStrategy)'
+                }
+            });
+        });
+        if (requests.length > 0) {
+            await sheets.spreadsheets.batchUpdate({
+                spreadsheetId: process.env.SPREADSHEET_ID,
+                resource: { requests }
+            });
+        }
+        return true;
+    } catch (error) {
+        console.error('Error formatting sheets:', error);
+        throw error;
+    }
+};
+
 module.exports = {
+    formatSheets,
     clearAllData,
     appendDataToSheet,
     getTicketData,
@@ -240,4 +278,5 @@ module.exports = {
     getMatches,
     updateMatchStatus
 };
+
 

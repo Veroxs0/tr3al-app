@@ -232,3 +232,16 @@ router.post('/admin/clear-all', adminAuth, async (req, res) => {
     }
 });
 
+
+// POST /api/admin/format-sheets (Admin)
+router.post('/admin/format-sheets', adminAuth, async (req, res) => {
+    try {
+        const { formatSheets } = require('../utils/googleSheets');
+        await formatSheets();
+        res.json({ success: true, message: 'Sheets formatted successfully' });
+    } catch (error) {
+        console.error('Error formatting sheets:', error);
+        res.status(500).json({ success: false, message: 'Failed to format sheets' });
+    }
+});
+
