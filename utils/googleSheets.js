@@ -216,15 +216,6 @@ const updateMatchStatus = async (matchId, status) => {
     }
 };
 
-module.exports = {
-    clearAllData,
-    appendDataToSheet,
-    getTicketData,
-    updateTicketStatus,
-    appendMatch,
-    getMatches,
-    updateMatchStatus
-};
 
 const clearAllData = async () => {
     try {
@@ -238,5 +229,15 @@ const clearAllData = async () => {
         console.error('Error clearing data:', error);
         throw error;
     }
+};
+
+module.exports = {
+    clearAllData,
+    appendDataToSheet,
+    getTicketData,
+    updateTicketStatus,
+    appendMatch,
+    getMatches,
+    updateMatchStatus
 };
 
