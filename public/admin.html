@@ -47,49 +47,80 @@
         </div>
 
         <div id="ticketData" style="display: none;">
-            <div class="admin-card">
-                <div class="admin-row">
-                    <span class="admin-label">الاسم:</span>
-                    <span class="admin-value" id="t-name"></span>
-                </div>
-                <div class="admin-row">
-                    <span class="admin-label">الهاتف:</span>
-                    <span class="admin-value" id="t-phone"></span>
-                </div>
-                <div class="admin-row">
-                    <span class="admin-label">Fan ID:</span>
-                    <span class="admin-value" id="t-fanid"></span>
-                </div>
-                <div class="admin-row">
-                    <span class="admin-label">المنطقة:</span>
-                    <span class="admin-value" id="t-location"></span>
-                </div>
-                <div class="admin-row">
-                    <span class="admin-label">طريقة الدفع:</span>
-                    <span class="admin-value" id="t-payment"></span>
-                </div>
-                <div class="admin-row" style="flex-direction: column; align-items: flex-start; gap: 0.5rem; border: none;">
-                    <span class="admin-label">الملاحظات:</span>
-                    <span class="admin-value" id="t-notes" style="font-weight: 400;">لا يوجد</span>
-                </div>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="scan">مسح تذكرة (QR)</button>
+                <button class="tab-btn" data-tab="matches">إدارة المباريات</button>
             </div>
 
-            <div class="admin-card" style="text-align: center;">
-                <h3 style="margin-bottom: 1rem;">حالة التذكرة</h3>
-                <div id="t-status" class="status-badge status-valid" style="font-size: 1.2rem; padding: 0.5rem 1.5rem; display: inline-block;"></div>
+            <!-- Scan Tab -->
+            <div id="scanTab" class="tab-content active">
+                <div class="admin-card">
+                    <div class="admin-row">
+                        <span class="admin-label">الاسم:</span>
+                        <span class="admin-value" id="t-name"></span>
+                    </div>
+                    <div class="admin-row">
+                        <span class="admin-label">الهاتف:</span>
+                        <span class="admin-value" id="t-phone"></span>
+                    </div>
+                    <div class="admin-row">
+                        <span class="admin-label">Fan ID:</span>
+                        <span class="admin-value" id="t-fanid"></span>
+                    </div>
+                    <div class="admin-row">
+                        <span class="admin-label">المنطقة:</span>
+                        <span class="admin-value" id="t-location"></span>
+                    </div>
+                    <div class="admin-row">
+                        <span class="admin-label">طريقة الدفع:</span>
+                        <span class="admin-value" id="t-payment"></span>
+                    </div>
+                    <div class="admin-row" style="flex-direction: column; align-items: flex-start; gap: 0.5rem; border: none;">
+                        <span class="admin-label">الملاحظات:</span>
+                        <span class="admin-value" id="t-notes" style="font-weight: 400;">لا يوجد</span>
+                    </div>
+                </div>
+
+                <div class="admin-card" style="text-align: center;">
+                    <h3 style="margin-bottom: 1rem;">حالة التذكرة</h3>
+                    <div id="t-status" class="status-badge status-valid" style="font-size: 1.2rem; padding: 0.5rem 1.5rem; display: inline-block;"></div>
+                </div>
+
+                <div class="admin-card">
+                    <h3 style="margin-bottom: 1rem; text-align: center;">إيصال التحويل</h3>
+                    <a id="receiptLink" href="#" target="_blank">
+                        <img id="t-receipt" class="receipt-img" src="" alt="Receipt">
+                    </a>
+                </div>
+
+                <button id="scanBtn" class="btn-submit">
+                    <span class="btn-text">تأكيد حضور الراكب (استخدام التذكرة)</span>
+                    <div class="loader"></div>
+                </button>
             </div>
 
-            <div class="admin-card">
-                <h3 style="margin-bottom: 1rem; text-align: center;">إيصال التحويل</h3>
-                <a id="receiptLink" href="#" target="_blank">
-                    <img id="t-receipt" class="receipt-img" src="" alt="Receipt">
-                </a>
-            </div>
+            <!-- Matches Tab -->
+            <div id="matchesTab" class="tab-content" style="display: none;">
+                <div class="card" style="margin-bottom: 20px;">
+                    <h3>إضافة مباراة جديدة</h3>
+                    <div style="display: grid; gap: 15px; margin-top: 15px;">
+                        <input type="text" id="newTeamA" class="form-control" placeholder="الفريق الأول (مثال: الأهلي)">
+                        <input type="text" id="newTeamB" class="form-control" placeholder="الفريق الثاني (مثال: الزمالك)">
+                        <input type="date" id="newDate" class="form-control">
+                        <input type="time" id="newTime" class="form-control">
+                        <input type="text" id="newLocation" class="form-control" placeholder="مكان المباراة (مثال: ستاد القاهرة)">
+                        <button id="addMatchBtn" class="btn">إضافة المباراة</button>
+                    </div>
+                </div>
 
-            <button id="scanBtn" class="btn-submit">
-                <span class="btn-text">تأكيد حضور الراكب (استخدام التذكرة)</span>
-                <div class="loader"></div>
-            </button>
+                <div class="card">
+                    <h3>المباريات الحالية</h3>
+                    <div id="adminMatchesList" style="margin-top: 15px;">
+                        <!-- Matches list will be loaded here -->
+                        <p style="color: #aaa; text-align: center;">جاري التحميل...</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

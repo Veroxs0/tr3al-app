@@ -30,7 +30,7 @@ const appendDataToSheet = async (data) => {
         // Ensure data is an array of strings/numbers
         const response = await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.SPREADSHEET_ID,
-            range: 'A:J',
+            range: 'Tickets!A:K',
             valueInputOption: 'USER_ENTERED',
             resource: {
                 values: [data],
@@ -52,7 +52,7 @@ const getTicketData = async (ticketId) => {
         
         const response = await sheets.spreadsheets.values.get({
             spreadsheetId: process.env.SPREADSHEET_ID,
-            range: 'A:J', 
+            range: 'Tickets!A:K', 
         });
         
         const rows = response.data.values;
@@ -79,10 +79,10 @@ const updateTicketStatus = async (rowIndex, status) => {
         const auth = getAuthToken();
         const sheets = google.sheets({ version: 'v4', auth });
         
-        // Assuming status is in column I (9th column)
+        // Assuming status is in column I (9th column) for Tickets
         const response = await sheets.spreadsheets.values.update({
             spreadsheetId: process.env.SPREADSHEET_ID,
-            range: `I${rowIndex}`,
+            range: `Tickets!I${rowIndex}`,
             valueInputOption: 'USER_ENTERED',
             resource: {
                 values: [[status]],
@@ -95,8 +95,86 @@ const updateTicketStatus = async (rowIndex, status) => {
     }
 }
 
+const appendMatch = async (data) => {
+    try {
+        if (!process.env.SPREADSHEET_ID) return;
+        const auth = getAuthToken();
+        const sheets = google.sheets({ version: 'v4', auth });
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            range: 'Matches!A:G',
+            valueInputOption: 'USER_ENTERED',
+            resource: { values: [data] },
+        });
+    } catch (error) {
+        console.error('Error appending match:', error);
+        throw error;
+    }
+};
+
+const getMatches = async () => {
+    try {
+        if (!process.env.SPREADSHEET_ID) return [];
+        const auth = getAuthToken();
+        const sheets = google.sheets({ version: 'v4', auth });
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            range: 'Matches!A:G', 
+        });
+        
+        const rows = response.data.values || [];
+        // skip header row if exists? Let's assume no header or handle in frontend. We'll return all and map.
+        return rows.map(row => ({
+            id: row[0],
+            teamA: row[1],
+            teamB: row[2],
+            date: row[3],
+            time: row[4],
+            location: row[5],
+            status: row[6]
+        }));
+    } catch (error) {
+        // If sheet doesn't exist, return empty array instead of crashing
+        console.error('Error fetching matches:', error);
+        return [];
+    }
+};
+
+const updateMatchStatus = async (matchId, status) => {
+    try {
+        if (!process.env.SPREADSHEET_ID) return null;
+        const auth = getAuthToken();
+        const sheets = google.sheets({ version: 'v4', auth });
+        
+        const response = await sheets.spreadsheets.values.get({
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            range: 'Matches!A:G', 
+        });
+        
+        const rows = response.data.values;
+        if (!rows) return null;
+        
+        const rowIndex = rows.findIndex(row => row[0] === matchId);
+        if (rowIndex === -1) return null;
+        
+        await sheets.spreadsheets.values.update({
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            range: `Matches!G${rowIndex + 1}`,
+            valueInputOption: 'USER_ENTERED',
+            resource: { values: [[status]] },
+        });
+        return true;
+    } catch (error) {
+        console.error('Error updating match status:', error);
+        throw error;
+    }
+};
+
 module.exports = {
     appendDataToSheet,
     getTicketData,
-    updateTicketStatus
+    updateTicketStatus,
+    appendMatch,
+    getMatches,
+    updateMatchStatus
 };

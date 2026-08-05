@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const QRCode = require('qrcode');
-const { appendDataToSheet, getTicketData, updateTicketStatus } = require('../utils/googleSheets');
+const { appendDataToSheet, getTicketData, updateTicketStatus, appendMatch, getMatches, updateMatchStatus } = require('../utils/googleSheets');
 const { uploadImage } = require('../utils/cloudinary');
 
 // Multer setup for memory storage (for uploading directly to Cloudinary)
@@ -25,9 +25,9 @@ const adminAuth = (req, res, next) => {
 // POST /api/register
 router.post('/register', upload.single('receipt'), async (req, res) => {
     try {
-        const { fullName, phone, fanId, location, locationDetails, paymentOption, notes } = req.body;
+        const { fullName, phone, fanId, location, locationDetails, paymentOption, notes, matchId } = req.body;
         
-        if (!fullName || !phone || !fanId || !location || !paymentOption) {
+        if (!fullName || !phone || !fanId || !location || !paymentOption || !matchId) {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
 
@@ -41,8 +41,13 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
         const timestamp = new Date().toISOString();
         const status = 'Valid';
 
+        // Fetch match details to save the match name
+        const matches = await getMatches();
+        const selectedMatch = matches.find(m => m.id === matchId);
+        const matchName = selectedMatch ? `${selectedMatch.teamA} vs ${selectedMatch.teamB}` : 'Unknown Match';
+
         // Data array for Google Sheets
-        // Columns: ID, Timestamp, Full Name, Phone, Fan ID, Location, Payment Option, Notes, Status, Receipt URL
+        // Columns: ID, Timestamp, Full Name, Phone, Fan ID, Location, Payment Option, Notes, Status, Receipt URL, Match Name
         const rowData = [
             ticketId,
             timestamp,
@@ -53,7 +58,8 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
             paymentOption,
             notes || '',
             status,
-            receiptUrl
+            receiptUrl,
+            matchName
         ];
 
         await appendDataToSheet(rowData);
@@ -100,7 +106,8 @@ router.get('/ticket/:id', adminAuth, async (req, res) => {
                 paymentOption: data[6],
                 notes: data[7],
                 status: data[8],
-                receiptUrl: data[9]
+                receiptUrl: data[9],
+                matchName: data[10] || 'Unknown Match'
             }
         });
     } catch (error) {
@@ -128,6 +135,55 @@ router.post('/ticket/:id/scan', adminAuth, async (req, res) => {
         res.json({ success: true, message: 'Ticket marked as scanned successfully!' });
     } catch (error) {
         console.error('Scan Ticket Error:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// GET /api/matches (Public)
+router.get('/matches', async (req, res) => {
+    try {
+        const matches = await getMatches();
+        res.json({ success: true, matches });
+    } catch (error) {
+        console.error('Error fetching matches:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// POST /api/matches (Admin)
+router.post('/matches', adminAuth, async (req, res) => {
+    try {
+        const { teamA, teamB, date, time, location } = req.body;
+        if (!teamA || !teamB || !date || !time || !location) {
+            return res.status(400).json({ success: false, message: 'Missing required fields' });
+        }
+        
+        const matchId = uuidv4();
+        const rowData = [matchId, teamA, teamB, date, time, location, 'Active'];
+        await appendMatch(rowData);
+        
+        res.json({ success: true, message: 'Match added successfully' });
+    } catch (error) {
+        console.error('Error adding match:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// POST /api/matches/:id/status (Admin)
+router.post('/matches/:id/status', adminAuth, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const matchId = req.params.id;
+        if (!status) return res.status(400).json({ success: false, message: 'Status required' });
+        
+        const success = await updateMatchStatus(matchId, status);
+        if (success) {
+            res.json({ success: true, message: 'Match status updated' });
+        } else {
+            res.status(404).json({ success: false, message: 'Match not found' });
+        }
+    } catch (error) {
+        console.error('Error updating match status:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });

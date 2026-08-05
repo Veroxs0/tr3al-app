@@ -67,7 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
         
-        const formData = new FormData(form);
+        // Get matchId from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const matchId = urlParams.get('matchId');
+        if (!matchId) {
+            alert('الرجاء اختيار مباراة أولاً من الصفحة الرئيسية.');
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+            return;
+        }
+
+        const formData = new FormData(e.target);
+        formData.append('matchId', matchId);
 
         try {
             const response = await fetch('/api/register', {
