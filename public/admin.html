@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ترحال | لوحة المسؤول</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <div class="header">
+            <h1><i class="fa-solid fa-shield-halved"></i> مسح التذكرة</h1>
+            <p>التحقق من بيانات الراكب</p>
+        </div>
+
+        <div id="loginState" style="text-align: center; padding: 2rem;">
+            <h3>تسجيل الدخول للمنظمين</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">يرجى إدخال اسم المستخدم وكلمة المرور لعرض بيانات التذكرة.</p>
+            
+            <div class="form-group" style="text-align: right;">
+                <label for="adminUser">اسم المستخدم</label>
+                <input type="text" id="adminUser" placeholder="أدخل اسم المستخدم">
+            </div>
+            
+            <div class="form-group" style="text-align: right;">
+                <label for="adminPass">كلمة المرور</label>
+                <input type="password" id="adminPass" placeholder="أدخل كلمة المرور">
+            </div>
+
+            <button id="loginBtn" class="btn-submit" style="margin-top: 1rem;">
+                <span class="btn-text">دخول</span>
+                <div class="loader"></div>
+            </button>
+            <p id="loginError" style="color: #ef4444; margin-top: 1rem; display: none;"></p>
+        </div>
+
+        <div id="loadingState" style="text-align: center; padding: 2rem; display: none;">
+            <div class="loader" style="display: block; border-top-color: var(--primary-color);"></div>
+            <p style="margin-top: 1rem; color: var(--text-secondary);">جاري جلب البيانات...</p>
+        </div>
+
+        <div id="errorState" style="display: none; text-align: center; color: var(--primary-color);">
+            <i class="fa-solid fa-triangle-exclamation fa-3x" style="margin-bottom: 1rem;"></i>
+            <h2 id="errorMessage">التذكرة غير صالحة أو غير موجودة!</h2>
+        </div>
+
+        <div id="ticketData" style="display: none;">
+            <div class="admin-card">
+                <div class="admin-row">
+                    <span class="admin-label">الاسم:</span>
+                    <span class="admin-value" id="t-name"></span>
+                </div>
+                <div class="admin-row">
+                    <span class="admin-label">الهاتف:</span>
+                    <span class="admin-value" id="t-phone"></span>
+                </div>
+                <div class="admin-row">
+                    <span class="admin-label">Fan ID:</span>
+                    <span class="admin-value" id="t-fanid"></span>
+                </div>
+                <div class="admin-row">
+                    <span class="admin-label">المنطقة:</span>
+                    <span class="admin-value" id="t-location"></span>
+                </div>
+                <div class="admin-row">
+                    <span class="admin-label">طريقة الدفع:</span>
+                    <span class="admin-value" id="t-payment"></span>
+                </div>
+                <div class="admin-row" style="flex-direction: column; align-items: flex-start; gap: 0.5rem; border: none;">
+                    <span class="admin-label">الملاحظات:</span>
+                    <span class="admin-value" id="t-notes" style="font-weight: 400;">لا يوجد</span>
+                </div>
+            </div>
+
+            <div class="admin-card" style="text-align: center;">
+                <h3 style="margin-bottom: 1rem;">حالة التذكرة</h3>
+                <div id="t-status" class="status-badge status-valid" style="font-size: 1.2rem; padding: 0.5rem 1.5rem; display: inline-block;"></div>
+            </div>
+
+            <div class="admin-card">
+                <h3 style="margin-bottom: 1rem; text-align: center;">إيصال التحويل</h3>
+                <a id="receiptLink" href="#" target="_blank">
+                    <img id="t-receipt" class="receipt-img" src="" alt="Receipt">
+                </a>
+            </div>
+
+            <button id="scanBtn" class="btn-submit">
+                <span class="btn-text">تأكيد حضور الراكب (استخدام التذكرة)</span>
+                <div class="loader"></div>
+            </button>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

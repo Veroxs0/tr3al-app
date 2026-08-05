@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ترحال | حجز رحلات المباريات</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Form Section -->
+        <div id="formSection">
+            <div class="header">
+                <h1>نظام ترحال</h1>
+                <p>احجز مقعدك الآن لدعم فريقك في المدرج!</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="fullName">الاسم الثلاثي</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" required placeholder="محمد أحمد محمود">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">رقم الهاتف</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" required placeholder="01XXXXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="fanId">رقم الـ Fan ID</label>
+                    <input type="text" id="fanId" name="fanId" class="form-control" required placeholder="XXXXXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>المنطقة</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="location" value="بنها" checked>
+                            <span>من بنها</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="location" value="خارج بنها">
+                            <span>خارج بنها</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="locationDetailsGroup">
+                    <label for="locationDetails" id="locationDetailsLabel">منين من بنها؟</label>
+                    <input type="text" id="locationDetails" name="locationDetails" class="form-control" required placeholder="أدخل منطقتك بالتفصيل (مثل: الفيلات، كفر الجزار، إلخ..)">
+                </div>
+
+                <div class="payment-info">
+                    <h3>برجاء التحويل على فودافون كاش</h3>
+                    <div class="phone-number">01210075446</div>
+                </div>
+
+                <div class="form-group">
+                    <label>نظام الدفع</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="paymentOption" value="المبلغ كامل" checked>
+                            <span>دفع المبلغ كامل</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="paymentOption" value="نص المبلغ (تأكيد حجز)">
+                            <span>دفع نص المبلغ (تأكيد حجز)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>إيصال التحويل (سكرين شوت)</label>
+                    <div class="file-upload">
+                        <i class="fa-solid fa-cloud-arrow-up fa-2x" style="color: var(--primary-color); margin-bottom: 10px;"></i>
+                        <span id="fileUploadText">اضغط هنا لرفع صورة الإيصال</span>
+                        <input type="file" id="receipt" name="receipt" accept="image/*" required>
+                    </div>
+                    <div id="fileName" class="file-name"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">ملاحظات / استفسار (اختياري)</label>
+                    <textarea id="notes" name="notes" class="form-control" placeholder="هل لديك أي استفسار أو ملاحظة؟"></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">
+                    <span class="btn-text">تأكيد الحجز</span>
+                    <div class="loader"></div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Success Section -->
+        <div id="successSection" class="success-container">
+            <div class="header" style="margin-bottom: 1rem;">
+                <i class="fa-solid fa-circle-check fa-4x" style="color: var(--success); margin-bottom: 1rem;"></i>
+                <h1>تم الحجز بنجاح!</h1>
+                <p>احتفظ بهذا الباركود، سيتم مسحه عند ركوب الباص.</p>
+            </div>
+            
+            <div class="qr-code">
+                <img id="qrCodeImage" src="" alt="QR Code">
+            </div>
+            
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">رقم التذكرة:</p>
+            <div id="ticketIdDisplay" class="ticket-id"></div>
+            
+            <button onclick="window.location.reload()" class="btn-submit" style="background: rgba(255,255,255,0.1); margin-top: 2rem;">حجز جديد</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
