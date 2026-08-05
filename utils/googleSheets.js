@@ -217,6 +217,7 @@ const updateMatchStatus = async (matchId, status) => {
 };
 
 module.exports = {
+    clearAllData,
     appendDataToSheet,
     getTicketData,
     updateTicketStatus,
@@ -224,3 +225,18 @@ module.exports = {
     getMatches,
     updateMatchStatus
 };
+
+const clearAllData = async () => {
+    try {
+        if (!process.env.SPREADSHEET_ID) return;
+        const auth = getAuthToken();
+        const sheets = google.sheets({ version: 'v4', auth });
+        await sheets.spreadsheets.values.clear({ spreadsheetId: process.env.SPREADSHEET_ID, range: 'Tickets!A2:K1000' });
+        await sheets.spreadsheets.values.clear({ spreadsheetId: process.env.SPREADSHEET_ID, range: 'Matches!A2:G1000' });
+        return true;
+    } catch (error) {
+        console.error('Error clearing data:', error);
+        throw error;
+    }
+};
+

@@ -219,3 +219,16 @@ router.post('/matches/:id/status', adminAuth, async (req, res) => {
 });
 
 module.exports = router;
+
+// POST /api/admin/clear-all (Admin)
+router.post('/admin/clear-all', adminAuth, async (req, res) => {
+    try {
+        const { clearAllData } = require('../utils/googleSheets');
+        await clearAllData();
+        res.json({ success: true, message: 'All test data cleared successfully' });
+    } catch (error) {
+        console.error('Error clearing data:', error);
+        res.status(500).json({ success: false, message: 'Failed to clear data' });
+    }
+});
+
