@@ -43,6 +43,19 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
 
         // Fetch match details to save the match name
         const matches = await getMatches();
+        
+        // --- INJECT DUMMY MATCH FOR TESTING ---
+        const dummyMatch = {
+            id: 'ahly-barca-19-aug',
+            teamA: 'الأهلي',
+            teamB: 'برشلونة',
+            date: 'الأربعاء 19 أغسطس',
+            time: '21:00',
+            location: 'استاد القاهرة',
+            status: 'Active'
+        };
+        matches.push(dummyMatch);
+
         const selectedMatch = matches.find(m => m.id === matchId);
         const matchName = selectedMatch ? `${selectedMatch.teamA} vs ${selectedMatch.teamB}` : 'Unknown Match';
 
@@ -143,6 +156,23 @@ router.post('/ticket/:id/scan', adminAuth, async (req, res) => {
 router.get('/matches', async (req, res) => {
     try {
         const matches = await getMatches();
+
+        // --- INJECT DUMMY MATCH FOR TESTING ---
+        const dummyMatch = {
+            id: 'ahly-barca-19-aug',
+            teamA: 'الأهلي',
+            teamB: 'برشلونة',
+            date: 'الأربعاء 19 أغسطس',
+            time: '21:00',
+            location: 'استاد القاهرة',
+            status: 'Active'
+        };
+        // Ensure it only shows if not already added by admin
+        const exists = matches.some(m => m.teamA.includes('الأهلي') && m.teamB.includes('برشلونة'));
+        if (!exists) {
+            matches.unshift(dummyMatch);
+        }
+
         res.json({ success: true, matches });
     } catch (error) {
         console.error('Error fetching matches:', error);

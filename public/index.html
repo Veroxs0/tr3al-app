@@ -47,6 +47,21 @@
             justify-content: center;
             gap: 8px;
         }
+        .team-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+        .team-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
+        }
         .book-btn {
             background: var(--primary);
             color: var(--bg-dark);
@@ -111,10 +126,33 @@
                     matchesContainer.innerHTML = data.matches.map(match => {
                         const isClosed = match.status !== 'Active';
                         
+                        // Helper to get logo URL
+                        const getLogo = (name) => {
+                            if (name.includes('أهلي') || name.includes('اهلي')) {
+                                return 'https://upload.wikimedia.org/wikipedia/ar/8/8c/Al_Ahly_SC_logo.svg';
+                            }
+                            if (name.includes('برشلونة')) {
+                                return 'https://upload.wikimedia.org/wikipedia/ar/3/3a/FC_Barcelona_%28crest%29.svg';
+                            }
+                            if (name.includes('زمالك')) {
+                                return 'https://upload.wikimedia.org/wikipedia/ar/thumb/8/89/Zamalek_SC_logo_2023.png/250px-Zamalek_SC_logo_2023.png';
+                            }
+                            // Default fallback
+                            return 'https://cdn-icons-png.flaticon.com/512/33/33736.png';
+                        };
+
                         return `
                             <div class="match-card">
                                 <div class="match-teams">
-                                    ${match.teamA} <span>VS</span> ${match.teamB}
+                                    <div class="team-container">
+                                        <img src="${getLogo(match.teamA)}" class="team-logo" alt="${match.teamA}">
+                                        <span>${match.teamA}</span>
+                                    </div>
+                                    <span style="font-size: 0.8rem; color: #555;">VS</span>
+                                    <div class="team-container">
+                                        <img src="${getLogo(match.teamB)}" class="team-logo" alt="${match.teamB}">
+                                        <span>${match.teamB}</span>
+                                    </div>
                                 </div>
                                 <div class="match-info">
                                     <i class="far fa-calendar-alt"></i> ${match.date}
