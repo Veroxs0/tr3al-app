@@ -30,8 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
-            fileNameDisplay.textContent = 'الملف المرفق: ' + e.target.files[0].name;
-            fileUploadText.textContent = 'تم اختيار الإيصال ✓';
+            const file = e.target.files[0];
+            
+            if (!file.type.startsWith('image/')) {
+                alert('الرجاء رفع صورة فقط (لا يمكن رفع ملفات أو فيديوهات).');
+                e.target.value = '';
+                fileNameDisplay.textContent = '';
+                fileUploadText.textContent = 'اضغط هنا لرفع صورة الإيصال';
+                fileUploadText.style.color = '';
+                return;
+            }
+
+            if (file.size > 200 * 1024) {
+                alert('حجم الصورة كبير جداً. الحد الأقصى هو 200 كيلوبايت.');
+                e.target.value = '';
+                fileNameDisplay.textContent = '';
+                fileUploadText.textContent = 'اضغط هنا لرفع صورة الإيصال';
+                fileUploadText.style.color = '';
+                return;
+            }
+
+            fileNameDisplay.textContent = 'الملف المرفق: ' + file.name;
+            fileUploadText.textContent = 'تم اختيار الصورة بنجاح ✔';
             fileUploadText.style.color = 'var(--success)';
         } else {
             fileNameDisplay.textContent = '';

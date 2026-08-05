@@ -20,7 +20,7 @@
             <form id="registerForm">
                 <div class="form-group">
                     <label for="fullName">الاسم الثلاثي</label>
-                    <input type="text" id="fullName" name="fullName" class="form-control" required placeholder="محمد أحمد محمود" pattern="^[\u0621-\u064A\s]+$" title="الرجاء إدخال حروف عربية فقط">
+                    <input type="text" id="fullName" name="fullName" class="form-control" required placeholder="أدخل الاسم الثلاثي" pattern="^[\u0621-\u064A\s]+$" title="الرجاء إدخال حروف عربية فقط">
                 </div>
 
                 <div class="form-group">
@@ -30,7 +30,7 @@
 
                 <div class="form-group">
                     <label for="fanId">رقم الـ Fan ID</label>
-                    <input type="text" id="fanId" name="fanId" class="form-control" required placeholder="XXXXXXXXXX">
+                    <input type="text" id="fanId" name="fanId" class="form-control" required placeholder="أدخل رقم الـ Fan ID" pattern="^[0-9]{14}$" minlength="14" maxlength="14" title="الرجاء إدخال رقم مكون من 14 رقم فقط">
                 </div>
 
                 <div class="form-group">
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>إيصال التحويل (سكرين شوت)</label>
+                    <label>إيصال تحويل</label>
                     <div class="file-upload">
                         <i class="fa-solid fa-cloud-arrow-up fa-2x" style="color: var(--primary-color); margin-bottom: 10px;"></i>
                         <span id="fileUploadText">اضغط هنا لرفع صورة الإيصال</span>
