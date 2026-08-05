@@ -17,6 +17,34 @@ const getAuthToken = () => {
     });
 };
 
+const ensureSheetsExist = async (sheetsClient) => {
+    try {
+        const response = await sheetsClient.spreadsheets.get({
+            spreadsheetId: process.env.SPREADSHEET_ID
+        });
+        
+        const existingSheets = response.data.sheets.map(s => s.properties.title);
+        
+        const requests = [];
+        if (!existingSheets.includes('Tickets')) {
+            requests.push({ addSheet: { properties: { title: 'Tickets' } } });
+        }
+        if (!existingSheets.includes('Matches')) {
+            requests.push({ addSheet: { properties: { title: 'Matches' } } });
+        }
+        
+        if (requests.length > 0) {
+            await sheetsClient.spreadsheets.batchUpdate({
+                spreadsheetId: process.env.SPREADSHEET_ID,
+                resource: { requests }
+            });
+            console.log('Created missing sheets: Tickets and/or Matches');
+        }
+    } catch (error) {
+        console.error('Error ensuring sheets exist:', error);
+    }
+};
+
 const appendDataToSheet = async (data) => {
     try {
         if (!process.env.SPREADSHEET_ID || !process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
@@ -27,16 +55,34 @@ const appendDataToSheet = async (data) => {
         const auth = getAuthToken();
         const sheets = google.sheets({ version: 'v4', auth });
         
-        // Ensure data is an array of strings/numbers
-        const response = await sheets.spreadsheets.values.append({
-            spreadsheetId: process.env.SPREADSHEET_ID,
-            range: 'Tickets!A:K',
-            valueInputOption: 'USER_ENTERED',
-            resource: {
-                values: [data],
-            },
-        });
-        return response.data;
+        try {
+            const response = await sheets.spreadsheets.values.append({
+                spreadsheetId: process.env.SPREADSHEET_ID,
+                range: 'Tickets!A:K',
+                valueInputOption: 'USER_ENTERED',
+                resource: {
+                    values: [data],
+                },
+            });
+            return response.data;
+        } catch (error) {
+            if (error.message && error.message.includes('Unable to parse range')) {
+                console.log('Range not found. Attempting to create missing sheets...');
+                await ensureSheetsExist(sheets);
+                
+                // Retry once
+                const retryResponse = await sheets.spreadsheets.values.append({
+                    spreadsheetId: process.env.SPREADSHEET_ID,
+                    range: 'Tickets!A:K',
+                    valueInputOption: 'USER_ENTERED',
+                    resource: {
+                        values: [data],
+                    },
+                });
+                return retryResponse.data;
+            }
+            throw error;
+        }
     } catch (error) {
         console.error('Error appending data to Google Sheets:', error);
         throw error;
