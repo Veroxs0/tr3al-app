@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         radio.addEventListener('change', (e) => {
             if (e.target.value === 'بنها') {
                 locationDetailsLabel.textContent = 'منين من بنها؟';
-                locationDetailsInput.placeholder = 'أدخل منطقتك بالتفصيل (مثل: الفيلات، كفر الجزار، إلخ..)';
+                locationDetailsInput.placeholder = 'أدخل منطقتك بالتفصيل';
             } else {
                 locationDetailsLabel.textContent = 'منين من خارج بنها؟';
                 locationDetailsInput.placeholder = 'أدخل محافظتك ومنطقتك بالتفصيل';
