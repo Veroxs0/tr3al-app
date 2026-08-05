@@ -91,7 +91,7 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
 
     } catch (error) {
         console.error('Registration Error:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
@@ -125,7 +125,7 @@ router.get('/ticket/:id', adminAuth, async (req, res) => {
         });
     } catch (error) {
         console.error('Fetch Ticket Error:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
@@ -148,7 +148,7 @@ router.post('/ticket/:id/scan', adminAuth, async (req, res) => {
         res.json({ success: true, message: 'Ticket marked as scanned successfully!' });
     } catch (error) {
         console.error('Scan Ticket Error:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
@@ -176,7 +176,7 @@ router.get('/matches', async (req, res) => {
         res.json({ success: true, matches });
     } catch (error) {
         console.error('Error fetching matches:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
@@ -195,7 +195,7 @@ router.post('/matches', adminAuth, async (req, res) => {
         res.json({ success: true, message: 'Match added successfully' });
     } catch (error) {
         console.error('Error adding match:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
@@ -214,7 +214,7 @@ router.post('/matches/:id/status', adminAuth, async (req, res) => {
         }
     } catch (error) {
         console.error('Error updating match status:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error: ' + (error.message || error) });
     }
 });
 
