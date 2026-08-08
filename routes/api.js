@@ -51,7 +51,7 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
         const dummyMatch = {
             id: 'ahly-sharkia-23-aug',
             teamA: 'الأهلي المصري',
-            teamB: 'الشرقية للدخان',
+            teamB: 'الشرقية انبي',
             date: 'الأحد 23 أغسطس',
             time: '20:00',
             location: 'استاد القاهرة',
@@ -164,7 +164,7 @@ router.get('/matches', async (req, res) => {
         const dummyMatch = {
             id: 'ahly-sharkia-23-aug',
             teamA: 'الأهلي المصري',
-            teamB: 'الشرقية للدخان',
+            teamB: 'الشرقية انبي',
             date: 'الأحد 23 أغسطس',
             time: '20:00',
             location: 'استاد القاهرة',
