@@ -53,7 +53,7 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
             teamA: 'الأهلي المصري',
             teamB: 'الشرقية انبي',
             date: 'الأحد 23 أغسطس',
-            time: '20:00',
+            time: '08:00 مساءً',
             location: 'استاد القاهرة',
             status: 'Active'
         };
@@ -166,7 +166,7 @@ router.get('/matches', async (req, res) => {
             teamA: 'الأهلي المصري',
             teamB: 'الشرقية انبي',
             date: 'الأحد 23 أغسطس',
-            time: '20:00',
+            time: '08:00 مساءً',
             location: 'استاد القاهرة',
             status: 'Active'
         };
