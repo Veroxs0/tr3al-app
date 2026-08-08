@@ -7,7 +7,10 @@ const { appendDataToSheet, getTicketData, updateTicketStatus, appendMatch, getMa
 const { uploadImage } = require('../utils/cloudinary');
 
 // Multer setup for memory storage (for uploading directly to Cloudinary)
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 2 * 1024 * 1024 } // 2 MB limit
+});
 
 // Admin Auth Middleware
 const adminAuth = (req, res, next) => {

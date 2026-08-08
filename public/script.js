@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (file.size > 200 * 1024) {
-                alert('حجم الصورة كبير جداً. الحد الأقصى هو 200 كيلوبايت.');
+            if (file.size > 2 * 1024 * 1024) {
+                alert('حجم الصورة كبير جداً. الحد الأقصى هو 2 ميجابايت.');
                 e.target.value = '';
                 fileNameDisplay.textContent = '';
                 fileUploadText.textContent = 'اضغط هنا لرفع صورة الإيصال';
