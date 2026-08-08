@@ -125,6 +125,11 @@
     </div>
 
     <script>
+        function goToBook(matchId) {
+            sessionStorage.setItem('matchId', matchId);
+            window.location.href = '/book';
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const matchesContainer = document.getElementById('matchesContainer');
             const loadingMatches = document.getElementById('loadingMatches');
@@ -180,7 +185,7 @@
                                 
                                 ${isClosed 
                                     ? '<button class="book-btn disabled" disabled>الحجز مغلق</button>'
-                                    : `<a href="/book?matchId=${match.id}" class="book-btn">احجز الآن</a>`
+                                    : `<button onclick="goToBook('${match.id}')" class="book-btn">احجز الآن</button>`
                                 }
                             </div>
                         `;

@@ -67,9 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         submitBtn.classList.add('loading');
         
-        // Get matchId from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const matchId = urlParams.get('matchId');
+        // Get matchId from sessionStorage
+        const matchId = sessionStorage.getItem('matchId');
         if (!matchId) {
             alert('الرجاء اختيار مباراة أولاً من الصفحة الرئيسية.');
             submitBtn.classList.remove('loading');

@@ -82,7 +82,7 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
 
         // Generate QR Code that points to the admin ticket page
         const protocol = req.get('host').includes('localhost') ? 'http' : 'https';
-        const adminUrl = `${protocol}://${req.get('host')}/admin?id=${ticketId}`;
+        const adminUrl = `${protocol}://${req.get('host')}/admin#${ticketId}`;
         const qrCodeDataUrl = await QRCode.toDataURL(adminUrl);
 
         res.json({

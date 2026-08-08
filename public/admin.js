@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const ticketId = urlParams.get('id');
+    // Read ID from URL hash for better visual security
+    const ticketId = window.location.hash.substring(1);
 
     const loadingState = document.getElementById('loadingState');
     const errorState = document.getElementById('errorState');
