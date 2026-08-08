@@ -49,11 +49,11 @@ router.post('/register', upload.single('receipt'), async (req, res) => {
         
         // --- INJECT DUMMY MATCH FOR TESTING ---
         const dummyMatch = {
-            id: 'ahly-barca-19-aug',
-            teamA: 'الأهلي',
-            teamB: 'برشلونة',
-            date: 'الأربعاء 19 أغسطس',
-            time: '21:00',
+            id: 'ahly-sharkia-23-aug',
+            teamA: 'الأهلي المصري',
+            teamB: 'الشرقية للدخان',
+            date: 'الأحد 23 أغسطس',
+            time: '20:00',
             location: 'استاد القاهرة',
             status: 'Active'
         };
@@ -162,16 +162,16 @@ router.get('/matches', async (req, res) => {
 
         // --- INJECT DUMMY MATCH FOR TESTING ---
         const dummyMatch = {
-            id: 'ahly-barca-19-aug',
-            teamA: 'الأهلي',
-            teamB: 'برشلونة',
-            date: 'الأربعاء 19 أغسطس',
-            time: '21:00',
+            id: 'ahly-sharkia-23-aug',
+            teamA: 'الأهلي المصري',
+            teamB: 'الشرقية للدخان',
+            date: 'الأحد 23 أغسطس',
+            time: '20:00',
             location: 'استاد القاهرة',
             status: 'Active'
         };
         // Ensure it only shows if not already added by admin
-        const exists = matches.some(m => m.teamA.includes('الأهلي') && m.teamB.includes('برشلونة'));
+        const exists = matches.some(m => m.teamA.includes('الأهلي') && m.teamB.includes('الشرقية'));
         if (!exists) {
             matches.unshift(dummyMatch);
         }
